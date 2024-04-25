@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ticketHW</string>
+    <string name="male">男生</string>
+    <string name="female">女生</string>
+    <string name="regularticket">成人票\n(NTD 500)</string>
+    <string name="childticket">兒童票\n(NTD 250)</string>
+    <string name="studentticket">學生票\n(NTD 400)</string>
+
+</resources>

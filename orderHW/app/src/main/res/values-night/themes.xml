@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+<<<<<<<< HEAD:orderHW/app/src/main/res/values-night/themes.xml
+    <style name="Base.Theme.OrderHW" parent="Theme.Material3.DayNight.NoActionBar">
+========
+    <style name="Base.Theme.TicketHW" parent="Theme.Material3.DayNight.NoActionBar">
+>>>>>>>> 3ad892ed46a52245ac9d2de1f15a90b953f6b10b:new_ticketHW/app/src/main/res/values-night/themes.xml
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
+</resources>

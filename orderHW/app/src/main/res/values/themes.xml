@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+<<<<<<<< HEAD:orderHW/app/src/main/res/values/themes.xml
+    <style name="Base.Theme.OrderHW" parent="Theme.Material3.DayNight.NoActionBar">
+========
+    <style name="Base.Theme.TicketHW" parent="Theme.Material3.DayNight.NoActionBar">
+>>>>>>>> 3ad892ed46a52245ac9d2de1f15a90b953f6b10b:new_ticketHW/app/src/main/res/values/themes.xml
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+<<<<<<<< HEAD:orderHW/app/src/main/res/values/themes.xml
+    <style name="Theme.OrderHW" parent="Base.Theme.OrderHW" />
+========
+    <style name="Theme.TicketHW" parent="Base.Theme.TicketHW" />
+>>>>>>>> 3ad892ed46a52245ac9d2de1f15a90b953f6b10b:new_ticketHW/app/src/main/res/values/themes.xml
+</resources>

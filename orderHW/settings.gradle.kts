@@ -19,10 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-<<<<<<<< HEAD:orderHW/settings.gradle.kts
 rootProject.name = "orderHW"
-========
-rootProject.name = "ticketHW"
->>>>>>>> 3ad892ed46a52245ac9d2de1f15a90b953f6b10b:new_ticketHW/settings.gradle.kts
 include(":app")
  

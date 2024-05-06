@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:orderHW/app/src/androidTest/java/com/example/orderhw/ExampleInstrumentedTest.java
 package com.example.orderhw;
-========
-package com.example.tickethw;
->>>>>>>> 3ad892ed46a52245ac9d2de1f15a90b953f6b10b:new_ticketHW/app/src/androidTest/java/com/example/tickethw/ExampleInstrumentedTest.java
 
 import android.content.Context;
 
@@ -25,10 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-<<<<<<<< HEAD:orderHW/app/src/androidTest/java/com/example/orderhw/ExampleInstrumentedTest.java
         assertEquals("com.example.orderhw", appContext.getPackageName());
-========
-        assertEquals("com.example.tickethw", appContext.getPackageName());
->>>>>>>> 3ad892ed46a52245ac9d2de1f15a90b953f6b10b:new_ticketHW/app/src/androidTest/java/com/example/tickethw/ExampleInstrumentedTest.java
     }
 }

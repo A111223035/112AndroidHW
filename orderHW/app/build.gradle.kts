@@ -3,19 +3,11 @@ plugins {
 }
 
 android {
-<<<<<<<< HEAD:orderHW/app/build.gradle.kts
     namespace = "com.example.orderhw"
     compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.orderhw"
-========
-    namespace = "com.example.tickethw"
-    compileSdk = 34
-
-    defaultConfig {
-        applicationId = "com.example.tickethw"
->>>>>>>> 3ad892ed46a52245ac9d2de1f15a90b953f6b10b:new_ticketHW/app/build.gradle.kts
         minSdk = 30
         targetSdk = 34
         versionCode = 1
@@ -27,10 +19,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {

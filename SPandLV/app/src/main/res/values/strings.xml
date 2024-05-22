@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SPandLV</string>
+    <string name="txvMain">主餐：</string>
+    <string name="txvSide">附餐：</string>
+    <string name="txvDrink">飲料：</string>
+    <string name="txvMainShow">請選擇</string>
+    <string name="txvSideShow">請選擇</string>
+    <string name="txvDrinkShow">請選擇</string>
+</resources>

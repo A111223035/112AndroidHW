@@ -1,6 +1,5 @@
 package com.example.calculator_hw;
 
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,47 +11,52 @@ import android.widget.GridLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.DecimalFormat;
+
 enum State {FirstNumberInput, OperatorInputed, NumberInput}
 enum OP { None, Add, Sub, Mul, Div}
 
 public class MainActivity extends AppCompatActivity {
 
-    private int theValue = 0;
-    private int operand1=0, operand2=0;
-    private OP op=OP.None;
+    private double theValue = 0;
+    private double operand1 = 0, operand2 = 0;
+    private OP op = OP.None;
     private State state = State.FirstNumberInput;
+    private boolean isDecimal = false;
+    private DecimalFormat df = new DecimalFormat("#.##########"); // Adjust the format as per your requirement
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
-        SharedPreferences appSharePrefs = getSharedPreferences("pre_value",MODE_PRIVATE);
+        SharedPreferences appSharePrefs = getSharedPreferences("pre_value", MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = appSharePrefs.edit();
-        prefsEditor.putString("newItem", (new Integer(theValue)).toString());
+        prefsEditor.putString("newItem", Double.toString(theValue));
         prefsEditor.commit();
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         SharedPreferences appSharePrefs = getSharedPreferences("pre_value", MODE_PRIVATE);
-        theValue = (new Integer((appSharePrefs.getString("newItem", "0")))).intValue();
+        theValue = Double.parseDouble(appSharePrefs.getString("newItem", "0.0"));
     }
 
-    public void onWindowFocusChanged (boolean hasFocus) {
-        GridLayout keysGL = (GridLayout) findViewById(R.id.keys);
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        GridLayout keysGL = findViewById(R.id.keys);
 
-        int kbHeight = (int) (keysGL.getHeight() / keysGL.getRowCount());
-        int kbWidth = (int) (keysGL.getWidth() / keysGL.getColumnCount());
+        int kbHeight = keysGL.getHeight() / keysGL.getRowCount();
+        int kbWidth = keysGL.getWidth() / keysGL.getColumnCount();
 
-        Log.v("Vaule","kbHeight = "+ kbHeight);
-        Log.v("Vaule","kbWidth = "+ kbWidth);
+        Log.v("Value", "kbHeight = " + kbHeight);
+        Log.v("Value", "kbWidth = " + kbWidth);
+
         Button btn;
 
         for (int i = 0; i < keysGL.getChildCount(); i++) {
@@ -62,122 +66,137 @@ public class MainActivity extends AppCompatActivity {
             btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 36);
         }
 
-        EditText edt = (EditText) findViewById(R.id.display);
-        edt.setText((CharSequence) ("" + theValue));
+        EditText edt = findViewById(R.id.display);
+        edt.setText(df.format(theValue));
     }
-    public void processKeyInput(View view){
-        Button b= (Button )view;    // 取得發生事件的按鈕
-        String bstr= b.getText().toString();   // 取得發生事件的按鈕上的文字
-        int bint; // 透過R.id.display取得顯示結果的EditText元件
-        EditText edt = (EditText) findViewById(R.id.display);
 
-        switch(bstr) { // 依據發生事件的按鈕上的文字值，進行不同的處理
-            // 數字按鈕被點按時
-            case "0":
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-            case "6":
-            case "7":
-            case "8":
-            case "9":
-                bint = (new Integer(bstr)).intValue(); //將文字轉換為整數值
+    public void processKeyInput(View view) {
+        Button b = (Button) view;
+        String bstr = b.getText().toString();
+        double bdouble;
+        EditText edt = findViewById(R.id.display);
 
-                switch(state) { // 依據當時的狀態決定不同的處理
-                    case FirstNumberInput:
-                        theValue=theValue*10+bint;
-                        break;
-                    case OperatorInputed:
-                        theValue=bint;
-                        operand2=bint;
-                        state=State.NumberInput;
-                        break;
-                    case NumberInput:
-                        theValue=theValue*10+bint;
-                        break;
+        switch (bstr) {
+            case "0": case "1": case "2": case "3": case "4":
+            case "5": case "6": case "7": case "8": case "9":
+                bdouble = Double.parseDouble(bstr);
+                if (isDecimal) {
+                    String currentText = edt.getText().toString();
+                    currentText += bstr;
+                    theValue = Double.parseDouble(currentText);
+                } else {
+                    switch (state) {
+                        case FirstNumberInput:
+                            theValue = theValue * 10 + bdouble;
+                            break;
+                        case OperatorInputed:
+                            theValue = bdouble;
+                            operand2 = bdouble;
+                            state = State.NumberInput;
+                            break;
+                        case NumberInput:
+                            theValue = theValue * 10 + bdouble;
+                            break;
+                    }
                 }
-                edt.setText("" + theValue);
+                edt.setText(df.format(theValue));
                 break;
-            case "Clear": // 清除並重設相關變數
-                state=State.FirstNumberInput;
-                theValue=0;
-                edt.setText((CharSequence)("0"));
-                op=OP.None;
-                operand2=operand1=0;
+            case ".":
+                if (!isDecimal) {
+                    isDecimal = true;
+                    String currentText = edt.getText().toString();
+                    edt.setText(currentText + ".");
+                }
                 break;
-            case "Back": // 倒退鍵
-                theValue=(int)(theValue/10);
-                edt.setText("" + theValue);
+            case "Clear":
+                state = State.FirstNumberInput;
+                theValue = 0;
+                edt.setText("0");
+                op = OP.None;
+                operand2 = operand1 = 0;
+                isDecimal = false;
+                break;
+            case "Back":
+                String text = edt.getText().toString();
+                if (text.length() > 0) {
+                    text = text.substring(0, text.length() - 1);
+                    if (text.equals("") || text.equals("-")) {
+                        theValue = 0;
+                        edt.setText("0");
+                    } else {
+                        theValue = Double.parseDouble(text);
+                        edt.setText(text);
+                    }
+                }
                 break;
             case "+":
             case "-":
             case "*":
-            case "/": // 當operator被點選時
-                switch(state) { // 依據當時的狀態決定不同的處理
+            case "/":
+                isDecimal = false;
+                switch (state) {
                     case FirstNumberInput:
-                        operand1=theValue;
-                        operand2=theValue;
-                        switch(bstr) {
-                            case "+": op=OP.Add; break;
-                            case "-": op=OP.Sub; break;
-                            case "*": op=OP.Mul; break;
-                            case "/": op=OP.Div; break;
+                        operand1 = theValue;
+                        operand2 = theValue;
+                        switch (bstr) {
+                            case "+": op = OP.Add; break;
+                            case "-": op = OP.Sub; break;
+                            case "*": op = OP.Mul; break;
+                            case "/": op = OP.Div; break;
                         }
-                        state=State.OperatorInputed;
+                        state = State.OperatorInputed;
                         break;
                     case OperatorInputed:
-                        switch(bstr) {
-                            case "+": op=OP.Add; break;
-                            case "-": op=OP.Sub; break;
-                            case "*": op=OP.Mul; break;
-                            case "/": op=OP.Div; break;
+                        switch (bstr) {
+                            case "+": op = OP.Add; break;
+                            case "-": op = OP.Sub; break;
+                            case "*": op = OP.Mul; break;
+                            case "/": op = OP.Div; break;
                         }
-                        operand2=theValue;
+                        operand2 = theValue;
                         break;
                     case NumberInput:
-                        operand2=theValue;
-                        switch(op) {
-                            case Add: theValue=operand1+operand2; break;
-                            case Sub: theValue=operand1-operand2; break;
-                            case Mul: theValue=operand1*operand2; break;
-                            case Div: theValue=operand1/operand2; break;
+                        operand2 = theValue;
+                        switch (op) {
+                            case Add: theValue = operand1 + operand2; break;
+                            case Sub: theValue = operand1 - operand2; break;
+                            case Mul: theValue = operand1 * operand2; break;
+                            case Div: theValue = operand1 / operand2; break;
                         }
-                        operand1=theValue;
-                        switch(bstr) {
-                            case "+": op=OP.Add; break;
-                            case "-": op=OP.Sub; break;
-                            case "*": op=OP.Mul; break;
-                            case "/": op=OP.Div; break;
+                        operand1 = theValue;
+                        switch (bstr) {
+                            case "+": op = OP.Add; break;
+                            case "-": op = OP.Sub; break;
+                            case "*": op = OP.Mul; break;
+                            case "/": op = OP.Div; break;
                         }
-                        state=State.OperatorInputed;
-                        edt.setText("" + theValue);
+                        state = State.OperatorInputed;
+                        edt.setText(df.format(theValue));
                         break;
                 }
                 break;
-            case "=": // 當＝號被點選時，依據當時的狀態決定不同的處理
-                if(state==State.OperatorInputed) {
-                    switch(op) {
-                        case Add: theValue=operand1+operand2; break;
-                        case Sub: theValue=operand1-operand2; break;
-                        case Mul: theValue=operand1*operand2; break;
-                        case Div: theValue=operand1/operand2; break;
+            case "=":
+                isDecimal = false;
+                if (state == State.OperatorInputed) {
+                    switch (op) {
+                        case Add: theValue = operand1 + operand2; break;
+                        case Sub: theValue = operand1 - operand2; break;
+                        case Mul: theValue = operand1 * operand2; break;
+                        case Div: theValue = operand1 / operand2; break;
                     }
-                    operand1=theValue;
-                }
-                else if(state==State.NumberInput) {
-                    operand2=theValue;
-                    switch(op) {
-                        case Add: theValue=operand1+operand2; break;
-                        case Sub: theValue=operand1-operand2; break;
-                        case Mul: theValue=operand1*operand2; break;
-                        case Div: theValue=operand1/operand2; break;
+                    operand1 = theValue;
+                } else if (state == State.NumberInput) {
+                    operand2 = theValue;
+                    switch (op) {
+                        case Add: theValue = operand1 + operand2; break;
+                        case Sub: theValue = operand1 - operand2; break;
+                        case Mul: theValue = operand1 * operand2; break;
+                        case Div: theValue = operand1 / operand2; break;
                     }
-                    operand1=theValue;
-                    state=State.OperatorInputed;
+                    operand1 = theValue;
+                    state = State.OperatorInputed;
                 }
-                edt.setText("" + theValue);
+                edt.setText(df.format(theValue));
                 break;
         }
     }
